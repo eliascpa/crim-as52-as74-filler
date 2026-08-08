@@ -13,11 +13,13 @@ from reportlab.lib.pagesizes import legal
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
 
+APP_VERSION = "2.01"
+
 class CRIMApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         
-        self.title("Generador Oficial de Formularios CRIM PR — Revisión 2.0")
+        self.title(f"Generador Oficial de Formularios CRIM PR — v{APP_VERSION}")
         self.geometry("980x900")
         self.minsize(850, 700)
         
@@ -31,7 +33,7 @@ class CRIMApp(ctk.CTk):
         
         self.title_label = ctk.CTkLabel(
             self.header_frame, 
-            text="📑 Llenado de Formularios Oficiales CRIM (Revisión 2.0)", 
+            text=f"📑 Llenado de Formularios Oficiales CRIM (v{APP_VERSION})", 
             font=ctk.CTkFont(size=20, weight="bold")
         )
         self.title_label.pack(side="left", padx=20, pady=15)
