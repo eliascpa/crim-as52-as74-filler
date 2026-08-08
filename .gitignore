@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Client Data / PII / Cases
+*.json
+Caso_*.json
+
+# PDF outputs
+*.pdf
+!SOLICITUD DE CAMBIO DE DUEÑO.pdf
+!as74_blank.pdf
+
+# Logs
+*.log
