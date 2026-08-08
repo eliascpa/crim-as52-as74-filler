@@ -13,7 +13,7 @@ from reportlab.lib.pagesizes import legal
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
 
-APP_VERSION = "2.03"
+APP_VERSION = "2.04"
 
 class CRIMApp(ctk.CTk):
     def __init__(self):
@@ -805,14 +805,14 @@ class CRIMApp(ctk.CTk):
             
             # 4. Certificación Final
             cert_nombre = data.get("cert_nombre") or "Lcdo. Elías Fernández (abogado sucesion)"
-            draw(85.0, 864.0, cert_nombre, font_size=9, font_name="Courier")
+            draw(80.0, 864.0, cert_nombre, font_size=9, font_name="Helvetica")
             
             if data.get("tipo_comunidad") == "PRO-INDIVISO":
-                draw(425.0, 864.0, "X", font_size=9)
+                draw(476.0, 864.0, "X", font_size=9, font_name="Helvetica")
             else:
-                draw(335.0, 864.0, "X", font_size=9)
+                draw(396.0, 864.0, "X", font_size=9, font_name="Helvetica")
                 
-            draw(450.0, 915.0, data.get("cert_fecha", "08/08/2026"), font_size=9)
+            draw(392.0, 896.0, data.get("cert_fecha", "08/08/2026"), font_size=9, font_name="Helvetica")
             
             c.save()
             packet.seek(0)
