@@ -13,14 +13,14 @@ from reportlab.lib.pagesizes import legal
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
 
-APP_VERSION = "2.01"
+APP_VERSION = "2.02"
 
 class CRIMApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         
         self.title(f"Generador Oficial de Formularios CRIM PR — v{APP_VERSION}")
-        self.geometry("980x900")
+        self.geometry("1000x920")
         self.minsize(850, 700)
         
         # Grid layout
@@ -40,7 +40,7 @@ class CRIMApp(ctk.CTk):
         
         self.subtitle_label = ctk.CTkLabel(
             self.header_frame, 
-            text="Generador Notarial & Sucesiones — Vector Overlay Calibrado", 
+            text="Generador Notarial & Sucesiones — Modelo AS-74 Base Integrado", 
             font=ctk.CTkFont(size=12, slant="italic"),
             text_color="gray60"
         )
@@ -67,29 +67,29 @@ class CRIMApp(ctk.CTk):
         
         ctk.CTkButton(
             toolbar_frame, 
-            text="📂 Abrir Caso (JSON)", 
+            text="📂 Abrir Caso AS-52 (JSON)", 
             command=self.open_as52_json,
             fg_color="#37474f",
             hover_color="#263238",
-            width=160
+            width=170
         ).pack(side="left", padx=5)
         
         ctk.CTkButton(
             toolbar_frame, 
-            text="💾 Guardar Datos (JSON)", 
+            text="💾 Guardar Caso AS-52 (JSON)", 
             command=self.save_as52_json,
             fg_color="#00695c",
             hover_color="#004d40",
-            width=160
+            width=170
         ).pack(side="left", padx=5)
         
         ctk.CTkButton(
             toolbar_frame, 
-            text="📄 Nuevo / Limpiar", 
+            text="📄 Limpiar AS-52", 
             command=self.clear_as52, 
             fg_color="gray50", 
             hover_color="gray40", 
-            width=130
+            width=120
         ).pack(side="right", padx=5)
         
         # Scrollable form container
@@ -132,7 +132,7 @@ class CRIMApp(ctk.CTk):
         self.as52_tipo_uso.set("Residencial")
         self.as52_tipo_uso.pack(side="left", padx=5)
         
-        # --- Section 2: Datos del Acto / Notario (NUEVO REVISIÓN 2.0) ---
+        # --- Section 2: Datos del Acto / Notario ---
         sec2 = ctk.CTkLabel(scroll, text="📜 2. Datos de Escritura y Notario Otorgante", font=ctk.CTkFont(size=14, weight="bold"))
         sec2.grid(row=6, column=0, columnspan=2, sticky="w", padx=10, pady=(15, 5))
         
@@ -179,7 +179,7 @@ class CRIMApp(ctk.CTk):
         
         self.as52_adq2_dir = self.create_input(scroll, 20, 0, "Dirección Postal:", colspan=2)
         
-        # --- Section 6: Residencia Anterior (NUEVO REVISIÓN 2.0) ---
+        # --- Section 6: Residencia Anterior ---
         sec6 = ctk.CTkLabel(scroll, text="🏠 6. Datos de la Residencia Anterior del Adquirente", font=ctk.CTkFont(size=14, weight="bold"))
         sec6.grid(row=21, column=0, columnspan=2, sticky="w", padx=10, pady=(15, 5))
         
@@ -191,7 +191,7 @@ class CRIMApp(ctk.CTk):
         res3_frame.grid(row=24, column=0, columnspan=2, sticky="ew", padx=10, pady=5)
         
         ctk.CTkLabel(res3_frame, text="3. Año 20__:").pack(side="left", padx=(0, 2))
-        self.as52_res_ant_ano = ctk.CTkEntry(res3_frame, placeholder_text="26", width=45)
+        self.as52_res_ant_ano = ctk.CTkEntry(res3_frame, placeholder_text="", width=45)
         self.as52_res_ant_ano.pack(side="left", padx=2)
         
         ctk.CTkLabel(res3_frame, text="¿Vivía la propiedad?:").pack(side="left", padx=(15, 2))
@@ -210,11 +210,11 @@ class CRIMApp(ctk.CTk):
         ocup_frame = ctk.CTkFrame(scroll, fg_color="transparent")
         ocup_frame.grid(row=25, column=1, sticky="ew", padx=10, pady=5)
         ctk.CTkLabel(ocup_frame, text="Ocupación desde:").pack(side="left", padx=(0, 2))
-        self.as52_res_ant_desde = ctk.CTkEntry(ocup_frame, placeholder_text="01/2020", width=95)
+        self.as52_res_ant_desde = ctk.CTkEntry(ocup_frame, placeholder_text="", width=95)
         self.as52_res_ant_desde.pack(side="left", padx=2)
         
         ctk.CTkLabel(ocup_frame, text="Hasta:").pack(side="left", padx=(10, 2))
-        self.as52_res_ant_hasta = ctk.CTkEntry(ocup_frame, placeholder_text="08/2026", width=95)
+        self.as52_res_ant_hasta = ctk.CTkEntry(ocup_frame, placeholder_text="", width=95)
         self.as52_res_ant_hasta.pack(side="left", padx=2)
         
         # Action Buttons
@@ -223,7 +223,7 @@ class CRIMApp(ctk.CTk):
         
         self.btn_gen_as52 = ctk.CTkButton(
             btn_frame, 
-            text="🖨️ Generar y Abrir PDF AS-52 (Revisión 2.0)", 
+            text=f"🖨️ Generar y Abrir PDF AS-52 (v{APP_VERSION})", 
             font=ctk.CTkFont(size=15, weight="bold"),
             fg_color="#1b5e20", 
             hover_color="#2e7d32",
@@ -237,17 +237,82 @@ class CRIMApp(ctk.CTk):
         tab.grid_columnconfigure(0, weight=1)
         tab.grid_rowconfigure(1, weight=1)
         
-        info = ctk.CTkLabel(tab, text="📄 Este formulario genera el Anexo AS-74 para listar la totalidad de los comuneros/herederos.", font=ctk.CTkFont(size=12, slant="italic"))
-        info.grid(row=0, column=0, sticky="w", padx=10, pady=5)
+        # Action Toolbar (Open, Save, New)
+        toolbar_frame = ctk.CTkFrame(tab, fg_color="transparent")
+        toolbar_frame.grid(row=0, column=0, sticky="ew", padx=5, pady=5)
         
+        ctk.CTkButton(
+            toolbar_frame, 
+            text="📂 Abrir Caso AS-74 (JSON)", 
+            command=self.open_as74_json,
+            fg_color="#37474f",
+            hover_color="#263238",
+            width=170
+        ).pack(side="left", padx=5)
+        
+        ctk.CTkButton(
+            toolbar_frame, 
+            text="💾 Guardar Caso AS-74 (JSON)", 
+            command=self.save_as74_json,
+            fg_color="#00695c",
+            hover_color="#004d40",
+            width=170
+        ).pack(side="left", padx=5)
+        
+        ctk.CTkButton(
+            toolbar_frame, 
+            text="📄 Limpiar AS-74", 
+            command=self.clear_as74, 
+            fg_color="gray50", 
+            hover_color="gray40", 
+            width=120
+        ).pack(side="right", padx=5)
+        
+        # Scrollable form container
         scroll = ctk.CTkScrollableFrame(tab)
         scroll.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
         scroll.grid_columnconfigure((0, 1), weight=1)
         
-        self.as74_catastro = self.create_input(scroll, 0, 0, "Número de Catastro:")
-        self.as74_localizacion = self.create_input(scroll, 0, 1, "Localización de la Propiedad:")
+        # Section 1: Header AS-74
+        sec1 = ctk.CTkLabel(scroll, text="📋 1. Tipo de Comunidad y Datos de la Propiedad (Modelo AS-74 Base)", font=ctk.CTkFont(size=14, weight="bold"))
+        sec1.grid(row=0, column=0, columnspan=2, sticky="w", padx=10, pady=(10, 5))
         
-        self.as74_certificante = self.create_input(scroll, 1, 0, "Representante Legal / Certificante:", "Lcdo. Elías Fernández (abogado sucesion)", colspan=2)
+        hoja_frame = ctk.CTkFrame(scroll, fg_color="transparent")
+        hoja_frame.grid(row=1, column=0, sticky="ew", padx=10, pady=5)
+        ctk.CTkLabel(hoja_frame, text="Hoja N°:").pack(side="left", padx=(0, 2))
+        self.as74_hoja_num = ctk.CTkEntry(hoja_frame, placeholder_text="1", width=50)
+        self.as74_hoja_num.insert(0, "1")
+        self.as74_hoja_num.pack(side="left", padx=2)
+        
+        ctk.CTkLabel(hoja_frame, text="de:").pack(side="left", padx=(5, 2))
+        self.as74_hoja_total = ctk.CTkEntry(hoja_frame, placeholder_text="1", width=50)
+        self.as74_hoja_total.insert(0, "1")
+        self.as74_hoja_total.pack(side="left", padx=2)
+        
+        tipo_com_frame = ctk.CTkFrame(scroll, fg_color="transparent")
+        tipo_com_frame.grid(row=1, column=1, sticky="ew", padx=10, pady=5)
+        ctk.CTkLabel(tipo_com_frame, text="Tipo de Comunidad:").pack(side="left", padx=(0, 5))
+        self.as74_tipo_comunidad = ctk.CTkSegmentedButton(tipo_com_frame, values=["HEREDITARIA", "PRO-INDIVISO"])
+        self.as74_tipo_comunidad.set("HEREDITARIA")
+        self.as74_tipo_comunidad.pack(side="left", padx=5)
+        
+        self.as74_catastro = self.create_input(scroll, 2, 0, "Número de Catastro:")
+        self.as74_localizacion = self.create_input(scroll, 2, 1, "Localización de la Propiedad:")
+        
+        # Section 2: List of 3 Main Owners (Expandable to 10)
+        sec2 = ctk.CTkLabel(scroll, text="👥 2. Dueños / Comuneros (Hasta 10 Entradas)", font=ctk.CTkFont(size=14, weight="bold"))
+        sec2.grid(row=3, column=0, columnspan=2, sticky="w", padx=10, pady=(15, 5))
+        
+        self.as74_owners = []
+        for i in range(1, 4): # Dueños 1, 2, 3 creados por defecto en la UI
+            self.create_owner_block(scroll, row_start=4 + (i-1)*7, index=i)
+            
+        # Section 3: Certificación
+        sec3 = ctk.CTkLabel(scroll, text="✍️ 3. Certificación del Informante / Miembro", font=ctk.CTkFont(size=14, weight="bold"))
+        sec3.grid(row=25, column=0, columnspan=2, sticky="w", padx=10, pady=(20, 5))
+        
+        self.as74_cert_nombre = self.create_input(scroll, 26, 0, "Nombre del Miembro / Certificante:", "Lcdo. Elías Fernández (abogado sucesion)")
+        self.as74_cert_fecha = self.create_input(scroll, 26, 1, "Fecha de Certificación (dd/mm/aaaa):", "08/08/2026")
         
         # Action Buttons
         btn_frame = ctk.CTkFrame(tab, fg_color="transparent")
@@ -255,7 +320,7 @@ class CRIMApp(ctk.CTk):
         
         self.btn_gen_as74 = ctk.CTkButton(
             btn_frame, 
-            text="🖨️ Generar y Abrir PDF AS-74", 
+            text=f"🖨️ Generar y Abrir PDF AS-74 (Modelo Base v{APP_VERSION})", 
             font=ctk.CTkFont(size=15, weight="bold"),
             fg_color="#0d47a1", 
             hover_color="#1565c0",
@@ -263,6 +328,30 @@ class CRIMApp(ctk.CTk):
             command=self.generate_as74_pdf
         )
         self.btn_gen_as74.pack(fill="x")
+
+    def create_owner_block(self, parent, row_start, index):
+        lbl = ctk.CTkLabel(parent, text=f"👤 Dueño {index}", font=ctk.CTkFont(size=12, weight="bold"))
+        lbl.grid(row=row_start, column=0, columnspan=2, sticky="w", padx=10, pady=(10, 2))
+        
+        nombre = self.create_input(parent, row_start+1, 0, f"{index}) Nombre Completo:")
+        ssn = self.create_input(parent, row_start+1, 1, "Seguro Social:")
+        
+        dob = self.create_input(parent, row_start+2, 0, "Fecha Nacimiento (dd/mm/aaaa):")
+        tel = self.create_input(parent, row_start+2, 1, "Teléfono:")
+        
+        email = self.create_input(parent, row_start+3, 0, "Correo Electrónico:")
+        porc = self.create_input(parent, row_start+3, 1, "Porciento de Participación:")
+        
+        dir_post = self.create_input(parent, row_start+4, 0, "Dirección Postal:", colspan=2)
+        
+        cat2 = self.create_input(parent, row_start+5, 0, "Si tiene otra propiedad - (a) Catastro:")
+        loc2 = self.create_input(parent, row_start+5, 1, "(b) Localización:")
+        
+        self.as74_owners.append({
+            "nombre": nombre, "ssn": ssn, "dob": dob, "tel": tel,
+            "email": email, "porc": porc, "dir": dir_post,
+            "cat2": cat2, "loc2": loc2
+        })
 
     def create_input(self, parent, row, col, label_text, default_val="", colspan=1):
         frame = ctk.CTkFrame(parent, fg_color="transparent")
@@ -294,6 +383,20 @@ class CRIMApp(ctk.CTk):
         self.as52_tipo_uso.set("Residencial")
         self.as52_res_ant_vivia.set("Sin Marcar")
         self.as52_res_ant_poseia.set("Sin Marcar")
+
+    def clear_as74(self):
+        self.set_entry(self.as74_catastro, "")
+        self.set_entry(self.as74_localizacion, "")
+        self.set_entry(self.as74_hoja_num, "1")
+        self.set_entry(self.as74_hoja_total, "1")
+        self.as74_tipo_comunidad.set("HEREDITARIA")
+        
+        for o in self.as74_owners:
+            for k in ["nombre", "ssn", "dob", "tel", "email", "porc", "dir", "cat2", "loc2"]:
+                self.set_entry(o[k], "")
+                
+        self.set_entry(self.as74_cert_nombre, "")
+        self.set_entry(self.as74_cert_fecha, "")
 
     def set_entry(self, entry, text):
         entry.delete(0, "end")
@@ -347,6 +450,31 @@ class CRIMApp(ctk.CTk):
             "res_ant_hasta": self.as52_res_ant_hasta.get().strip()
         }
 
+    def get_as74_dict(self):
+        owners_data = []
+        for o in self.as74_owners:
+            owners_data.append({
+                "nombre": o["nombre"].get().strip(),
+                "ssn": o["ssn"].get().strip(),
+                "dob": o["dob"].get().strip(),
+                "tel": o["tel"].get().strip(),
+                "email": o["email"].get().strip(),
+                "porc": o["porc"].get().strip(),
+                "dir": o["dir"].get().strip(),
+                "cat2": o["cat2"].get().strip(),
+                "loc2": o["loc2"].get().strip()
+            })
+        return {
+            "hoja_num": self.as74_hoja_num.get().strip(),
+            "hoja_total": self.as74_hoja_total.get().strip(),
+            "tipo_comunidad": self.as74_tipo_comunidad.get(),
+            "catastro": self.as74_catastro.get().strip(),
+            "localizacion": self.as74_localizacion.get().strip(),
+            "dueños": owners_data,
+            "cert_nombre": self.as74_cert_nombre.get().strip(),
+            "cert_fecha": self.as74_cert_fecha.get().strip()
+        }
+
     def load_as52_dict(self, data):
         self.set_entry(self.as52_catastro, data.get("catastro", ""))
         self.set_entry(self.as52_localizacion, data.get("localizacion", ""))
@@ -393,6 +521,33 @@ class CRIMApp(ctk.CTk):
         self.set_entry(self.as52_res_ant_desde, data.get("res_ant_desde", ""))
         self.set_entry(self.as52_res_ant_hasta, data.get("res_ant_hasta", ""))
 
+    def load_as74_dict(self, data):
+        self.set_entry(self.as74_hoja_num, data.get("hoja_num", "1"))
+        self.set_entry(self.as74_hoja_total, data.get("hoja_total", "1"))
+        self.as74_tipo_comunidad.set(data.get("tipo_comunidad", "HEREDITARIA"))
+        self.set_entry(self.as74_catastro, data.get("catastro", ""))
+        self.set_entry(self.as74_localizacion, data.get("localizacion", ""))
+        
+        dueños = data.get("dueños", [])
+        for idx, o in enumerate(self.as74_owners):
+            if idx < len(dueños):
+                d = dueños[idx]
+                self.set_entry(o["nombre"], d.get("nombre", ""))
+                self.set_entry(o["ssn"], d.get("ssn", ""))
+                self.set_entry(o["dob"], d.get("dob", ""))
+                self.set_entry(o["tel"], d.get("tel", ""))
+                self.set_entry(o["email"], d.get("email", ""))
+                self.set_entry(o["porc"], d.get("porc", ""))
+                self.set_entry(o["dir"], d.get("dir", ""))
+                self.set_entry(o["cat2"], d.get("cat2", ""))
+                self.set_entry(o["loc2"], d.get("loc2", ""))
+            else:
+                for k in ["nombre", "ssn", "dob", "tel", "email", "porc", "dir", "cat2", "loc2"]:
+                    self.set_entry(o[k], "")
+                    
+        self.set_entry(self.as74_cert_nombre, data.get("cert_nombre", ""))
+        self.set_entry(self.as74_cert_fecha, data.get("cert_fecha", ""))
+
     def save_as52_json(self):
         data = self.get_as52_dict()
         catastro = data.get("catastro") or "Nuevo_Caso"
@@ -400,28 +555,60 @@ class CRIMApp(ctk.CTk):
         filepath = filedialog.asksaveasfilename(
             defaultextension=".json",
             filetypes=[("Archivos JSON", "*.json"), ("Todos los Archivos", "*.*")],
-            initialfile=f"Caso_{catastro}.json",
-            title="Guardar Datos del Caso (JSON)"
+            initialfile=f"Caso_AS52_{catastro}.json",
+            title="Guardar Datos del Caso AS-52 (JSON)"
         )
         if filepath:
             try:
                 with open(filepath, "w", encoding="utf-8") as f:
                     json.dump(data, f, ensure_ascii=False, indent=2)
-                messagebox.showinfo("Guardado", f"Datos del caso guardados exitosamente en:\n{filepath}")
+                messagebox.showinfo("Guardado", f"Caso AS-52 guardado exitosamente en:\n{filepath}")
             except Exception as e:
                 messagebox.showerror("Error", f"No se pudo guardar el archivo:\n{str(e)}")
 
     def open_as52_json(self):
         filepath = filedialog.askopenfilename(
             filetypes=[("Archivos JSON", "*.json"), ("Todos los Archivos", "*.*")],
-            title="Abrir Caso Guardado (JSON)"
+            title="Abrir Caso AS-52 Guardado (JSON)"
         )
         if filepath:
             try:
                 with open(filepath, "r", encoding="utf-8") as f:
                     data = json.load(f)
                 self.load_as52_dict(data)
-                messagebox.showinfo("Cargado", f"Caso cargado exitosamente desde:\n{filepath}")
+                messagebox.showinfo("Cargado", f"Caso AS-52 cargado exitosamente desde:\n{filepath}")
+            except Exception as e:
+                messagebox.showerror("Error", f"No se pudo abrir el archivo JSON:\n{str(e)}")
+
+    def save_as74_json(self):
+        data = self.get_as74_dict()
+        catastro = data.get("catastro") or "Nuevo_Caso"
+        
+        filepath = filedialog.asksaveasfilename(
+            defaultextension=".json",
+            filetypes=[("Archivos JSON", "*.json"), ("Todos los Archivos", "*.*")],
+            initialfile=f"Caso_AS74_{catastro}.json",
+            title="Guardar Datos del Caso AS-74 (JSON)"
+        )
+        if filepath:
+            try:
+                with open(filepath, "w", encoding="utf-8") as f:
+                    json.dump(data, f, ensure_ascii=False, indent=2)
+                messagebox.showinfo("Guardado", f"Caso AS-74 guardado exitosamente en:\n{filepath}")
+            except Exception as e:
+                messagebox.showerror("Error", f"No se pudo guardar el archivo:\n{str(e)}")
+
+    def open_as74_json(self):
+        filepath = filedialog.askopenfilename(
+            filetypes=[("Archivos JSON", "*.json"), ("Todos los Archivos", "*.*")],
+            title="Abrir Caso AS-74 Guardado (JSON)"
+        )
+        if filepath:
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                self.load_as74_dict(data)
+                messagebox.showinfo("Cargado", f"Caso AS-74 cargado exitosamente desde:\n{filepath}")
             except Exception as e:
                 messagebox.showerror("Error", f"No se pudo abrir el archivo JSON:\n{str(e)}")
 
@@ -441,7 +628,7 @@ class CRIMApp(ctk.CTk):
         
         try:
             self.fill_as52_vector(template_pdf, output_pdf, data)
-            messagebox.showinfo("¡Éxito!", f"PDF AS-52 (Revisión 2.0) generado correctamente:\n{output_pdf}")
+            messagebox.showinfo("¡Éxito!", f"PDF AS-52 generado correctamente:\n{output_pdf}")
             self.open_pdf(output_pdf)
         except Exception as e:
             messagebox.showerror("Error", f"Ocurrió un error al generar el PDF:\n{str(e)}")
@@ -467,7 +654,7 @@ class CRIMApp(ctk.CTk):
         draw(165, 314, data.get("registro", ""))
         draw(320, 314, data.get("seccion", ""))
         
-        # 3. Datos de Escritura y Notario (REVISIÓN 2.0)
+        # 3. Datos de Escritura y Notario
         draw(110, 331, data.get("escritura", ""))
         draw(445, 331, data.get("fecha_escritura", ""))
         draw(148, 398, data.get("notario", ""))
@@ -513,7 +700,7 @@ class CRIMApp(ctk.CTk):
             draw(425, 615, data.get("adq2_porciento", ""))
             draw(92, 632, data.get("adq2_dir", ""), font_size=8.5)
             
-        # 8. Datos Residencia Anterior del Adquirente (NUEVO REVISIÓN 2.0)
+        # 8. Datos Residencia Anterior del Adquirente
         draw(275, 714, data.get("res_ant_dir", ""), font_size=8.5)
         draw(275, 732, data.get("res_ant_dueno", ""), font_size=9)
         draw(192, 750, data.get("res_ant_ano", ""), font_size=9)
@@ -550,16 +737,17 @@ class CRIMApp(ctk.CTk):
             output.write(outputStream)
 
     def generate_as74_pdf(self):
-        catastro = self.as74_catastro.get().strip()
+        data = self.get_as74_dict()
+        catastro = data.get("catastro")
         if not catastro:
-            messagebox.showerror("Error", "Por favor ingresa el Número de Catastro.")
+            messagebox.showerror("Error", "Por favor ingresa al menos el Número de Catastro.")
             return
             
         output_pdf = f"Solicitud_Anexo_AS74_Duenos_Comunidad_{catastro}.pdf"
-        template_pdf = "as74_blank.pdf"
+        template_pdf = "Modelo AS-74-base.pdf"
         
         if not os.path.exists(template_pdf):
-            messagebox.showerror("Error", f"No se encontró la plantilla {template_pdf}.")
+            messagebox.showerror("Error", f"No se encontró la plantilla base oficial {template_pdf} en la carpeta actual.")
             return
             
         try:
@@ -571,41 +759,60 @@ class CRIMApp(ctk.CTk):
                     c.setFont(font_name, font_size)
                     c.drawString(x, 1008 - y, str(text))
                     
-            draw(335.0, 95.0, "X")
+            # 1. Header AS-74
+            if data.get("tipo_comunidad") == "PRO-INDIVISO":
+                draw(210.0, 94.2, "X", font_size=9)
+            else: # HEREDITARIA
+                draw(330.0, 94.2, "X", font_size=9)
+                
+            draw(95.0, 108.2, data.get("hoja_num", "1"), font_size=9)
+            draw(135.0, 108.2, data.get("hoja_total", "1"), font_size=9)
+            
+            # 2. Datos de la Propiedad
             draw(148.0, 158.5, catastro, font_size=8.5)
-            draw(148.0, 186.0, self.as74_localizacion.get().strip(), font_size=8.5)
+            draw(148.0, 186.0, data.get("localizacion", ""), font_size=8.5)
             
-            # Adquirente 1
-            draw(115.0, 222.0, "Juan del Pueblo")
-            draw(405.0, 222.0, "000-00-0000")
-            draw(210.0, 233.0, "01/01/1980")
-            draw(345.0, 233.0, "787-555-0000")
-            draw(135.0, 242.0, "ejemplo@email.com")
-            draw(465.0, 242.0, "33.33%")
-            draw(135.0, 252.1, "PO BOX 0000, San Juan, PR 00901", font_size=8.5)
+            # 3. Iteración de Dueños / Comuneros (Slot Y offsets: 213.2, 274.8, 337.8, 399.4, 462.4, 526.1...)
+            slot_y_starts = [213.2, 274.8, 337.8, 399.4, 462.4, 526.1, 589.8, 653.5, 717.2, 780.9]
             
-            # Adquirente 2
-            draw(115.0, 284.0, "Maria del Pueblo")
-            draw(405.0, 284.0, "000-00-0000")
-            draw(210.0, 295.0, "01/01/1982")
-            draw(345.0, 295.0, "787-555-0000")
-            draw(135.0, 304.0, "ejemplo2@email.com")
-            draw(465.0, 304.0, "33.33%")
-            draw(135.0, 313.6, "PO BOX 0000, San Juan, PR 00901", font_size=8.5)
+            for idx, o in enumerate(data.get("dueños", [])):
+                if idx >= len(slot_y_starts):
+                    break
+                    
+                if not o.get("nombre"):
+                    continue
+                    
+                y0 = slot_y_starts[idx]
+                
+                # Line 1: Nombre & SSN
+                draw(115.0, y0 + 8.8, o.get("nombre", ""))
+                draw(405.0, y0 + 8.8, o.get("ssn", ""))
+                
+                # Line 2: DOB & Tel
+                draw(210.0, y0 + 19.8, o.get("dob", ""))
+                draw(345.0, y0 + 19.8, o.get("tel", ""))
+                
+                # Line 3: Email & %
+                draw(135.0, y0 + 29.8, o.get("email", ""))
+                draw(465.0, y0 + 29.8, o.get("porc", ""))
+                
+                # Line 4: Dirección Postal
+                draw(135.0, y0 + 39.8, o.get("dir", ""), font_size=8.5)
+                
+                # Line 5 & 6: Otra Propiedad (Catastro / Localización)
+                draw(235.0, y0 + 49.8, o.get("cat2", ""), font_size=8.5)
+                draw(135.0, y0 + 59.8, o.get("loc2", ""), font_size=8.5)
             
-            # Adquirente 3
-            draw(115.0, 347.0, "Carlos del Pueblo")
-            draw(405.0, 347.0, "000-00-0000")
-            draw(210.0, 358.0, "01/01/1985")
-            draw(135.0, 365.0, "ejemplo3@email.com")
-            draw(465.0, 365.0, "33.33%")
-            draw(135.0, 375.2, "PO BOX 0000, San Juan, PR 00901", font_size=8.5)
+            # 4. Certificación Final
+            cert_nombre = data.get("cert_nombre") or "Lcdo. Elías Fernández (abogado sucesion)"
+            draw(85.0, 864.0, cert_nombre, font_size=9, font_name="Courier")
             
-            # Certificación
-            cert = self.as74_certificante.get().strip() or "Lcdo. Juan del Pueblo (Representante Legal)"
-            draw(80.0, 864.0, cert, font_size=9, font_name="Courier")
-            draw(400.0, 864.0, "X")
-            draw(450.0, 915.0, "01/01/2026")
+            if data.get("tipo_comunidad") == "PRO-INDIVISO":
+                draw(425.0, 864.0, "X", font_size=9)
+            else:
+                draw(335.0, 864.0, "X", font_size=9)
+                
+            draw(450.0, 915.0, data.get("cert_fecha", "08/08/2026"), font_size=9)
             
             c.save()
             packet.seek(0)
@@ -624,7 +831,7 @@ class CRIMApp(ctk.CTk):
             with open(output_pdf, "wb") as outputStream:
                 output.write(outputStream)
 
-            messagebox.showinfo("¡Éxito!", f"Anexo AS-74 generado correctamente:\n{output_pdf}")
+            messagebox.showinfo("¡Éxito!", f"Anexo AS-74 (v{APP_VERSION}) generado correctamente:\n{output_pdf}")
             self.open_pdf(output_pdf)
         except Exception as e:
             messagebox.showerror("Error", f"Ocurrió un error al generar el PDF AS-74:\n{str(e)}")
