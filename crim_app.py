@@ -13,7 +13,7 @@ from reportlab.lib.pagesizes import legal
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
 
-APP_VERSION = "2.02"
+APP_VERSION = "2.03"
 
 class CRIMApp(ctk.CTk):
     def __init__(self):
@@ -784,24 +784,24 @@ class CRIMApp(ctk.CTk):
                     
                 y0 = slot_y_starts[idx]
                 
-                # Line 1: Nombre & SSN
-                draw(115.0, y0 + 8.8, o.get("nombre", ""))
-                draw(405.0, y0 + 8.8, o.get("ssn", ""))
+                # Line 1: Nombre & SSN (SSN movido a X=430.0 para no obstruir el texto "Número de Seguro Social:")
+                draw(100.0, y0 + 8.8, o.get("nombre", ""))
+                draw(430.0, y0 + 8.8, o.get("ssn", ""))
                 
                 # Line 2: DOB & Tel
-                draw(210.0, y0 + 19.8, o.get("dob", ""))
-                draw(345.0, y0 + 19.8, o.get("tel", ""))
+                draw(182.0, y0 + 19.3, o.get("dob", ""))
+                draw(375.0, y0 + 19.3, o.get("tel", ""))
                 
                 # Line 3: Email & %
-                draw(135.0, y0 + 29.8, o.get("email", ""))
-                draw(465.0, y0 + 29.8, o.get("porc", ""))
+                draw(128.0, y0 + 29.8, o.get("email", ""))
+                draw(432.0, y0 + 29.8, o.get("porc", ""))
                 
                 # Line 4: Dirección Postal
-                draw(135.0, y0 + 39.8, o.get("dir", ""), font_size=8.5)
+                draw(120.0, y0 + 40.3, o.get("dir", ""), font_size=8.5)
                 
                 # Line 5 & 6: Otra Propiedad (Catastro / Localización)
-                draw(235.0, y0 + 49.8, o.get("cat2", ""), font_size=8.5)
-                draw(135.0, y0 + 59.8, o.get("loc2", ""), font_size=8.5)
+                draw(238.0, y0 + 50.1, o.get("cat2", ""), font_size=8.5)
+                draw(118.0, y0 + 59.2, o.get("loc2", ""), font_size=8.5)
             
             # 4. Certificación Final
             cert_nombre = data.get("cert_nombre") or "Lcdo. Elías Fernández (abogado sucesion)"
