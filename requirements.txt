@@ -1,0 +1,9 @@
+# Dependencias del Generador de Formularios CRIM PR
+# Instalar con:  pip install -r requirements.txt
+#
+# tkinter NO se instala con pip: viene incluido en el instalador oficial de
+# Python para Windows y macOS. En Linux: sudo apt install python3-tk
+
+customtkinter>=5.2.0
+PyPDF2>=3.0.0
+reportlab>=4.0.0

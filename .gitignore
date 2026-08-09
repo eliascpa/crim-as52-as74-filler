@@ -15,6 +15,13 @@ Caso_*.json
 *.pdf
 !SOLICITUD DE CAMBIO DE DUEÑO.pdf
 !as74_blank.pdf
+!Modelo AS-74-base.pdf
+
+# Calibración local de coordenadas (específica de cada instalación)
+coordenadas.json
+
+# Caché local de app externa (PDFgear), no forma parte del proyecto
+PDFgear/
 
 # Logs
 *.log
